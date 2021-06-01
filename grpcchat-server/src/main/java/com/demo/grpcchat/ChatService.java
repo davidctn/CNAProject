@@ -17,10 +17,22 @@ public class ChatService extends ChatGrpc.ChatImplBase{
 	@Override
 	public StreamObserver<Message> chatCall(final StreamObserver<Message> response){
 		return new StreamObserver<Message>() {
-
-			@Override
+		@Override
 			public void onNext(Message value) {
-				
+				System.out.println("New Message At"+value.getTime()+" : "+value.getContent());
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+				System.out.println("Type your message : ");
+				try {
+					String content = reader.readLine();
+					if(content.equalsIgnoreCase("EXIT"))
+						response.onCompleted();
+					else
+						response.onNext(Message.newBuilder().setContent(content)
+								.setTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(System.currentTimeMillis()).build()).build());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			@Override

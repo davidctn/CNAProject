@@ -51,6 +51,21 @@ public class ChatClient {
 			request.onNext(Message.newBuilder().setContent(connected)
 					.setTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(System.currentTimeMillis()).build()).build());
 
+			while(true) {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+				//bold
+				System.out.println("\033[0;1m" +"Type your message : ");
+					String content = reader.readLine();
+					if(content.equalsIgnoreCase("EXIT")){
+						String exitContent=nickname+" has left the chat!";
+						request.onNext(Message.newBuilder().setContent(exitContent)
+								.setTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(System.currentTimeMillis()).build()).build());
+						request.onCompleted();
+					}
+					else
+						request.onNext(Message.newBuilder().setContent(content)
+								.setTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(System.currentTimeMillis()).build()).build());
+
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

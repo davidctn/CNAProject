@@ -19,6 +19,15 @@ public class ChatClient {
 	
 	ChatGrpc.ChatStub stub;
 
+	public String boldConverter(String text){
+		text="\033[0;1m"+text;
+		return text;
+	}
+
+	public String italicConverter(String text){
+		text="033[3m"+text+"\\033[0m";
+		return text;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -43,7 +52,6 @@ public class ChatClient {
 					System.out.println("Chat Closed From server end");
 				}
 			});
-			
 			BufferedReader reader1 = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println(boldConverter("Insert your nickname:"));
 			String nickname = reader1.readLine();
@@ -53,7 +61,7 @@ public class ChatClient {
 
 			while(true) {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-				//bold
+
 				System.out.println("\033[0;1m" +"Type your message : ");
 					String content = reader.readLine();
 					if(content.equalsIgnoreCase("EXIT")){
@@ -65,7 +73,7 @@ public class ChatClient {
 					else
 						request.onNext(Message.newBuilder().setContent(content)
 								.setTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(System.currentTimeMillis()).build()).build());
-
+				
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

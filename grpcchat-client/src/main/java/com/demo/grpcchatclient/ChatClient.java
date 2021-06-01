@@ -26,6 +26,24 @@ public class ChatClient {
 			ManagedChannel managedChannel = ManagedChannelBuilder
 					.forAddress("localhost", 6565).usePlaintext().build();
 			stub = ChatGrpc.newStub(managedChannel);
+			StreamObserver<Message> request = stub.chatCall(new StreamObserver<Message>() {
+	
+				@Override
+				public void onNext(Message value) {
+					System.out.println("New Message At"+value.getTime()+" : "+value.getContent());
+				}
+	
+				@Override
+				public void onError(Throwable t) {
+					System.err.println("Error occurred : "+t.getMessage());
+				}
+	
+				@Override
+				public void onCompleted() {
+					System.out.println("Chat Closed From server end");
+				}
+			});
+
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

@@ -43,6 +43,13 @@ public class ChatClient {
 					System.out.println("Chat Closed From server end");
 				}
 			});
+			
+			BufferedReader reader1 = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println(boldConverter("Insert your nickname:"));
+			String nickname = reader1.readLine();
+			String connected=nickname+" connected to chat!";
+			request.onNext(Message.newBuilder().setContent(connected)
+					.setTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(System.currentTimeMillis()).build()).build());
 
 			}
 		}catch(Exception e) {
